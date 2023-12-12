@@ -1,5 +1,5 @@
 const LeftSidebar = () => {
-  return <div></div>;
+  return <div>kicu</div>;
 };
 
 export default LeftSidebar;
