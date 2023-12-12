@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { Button } from "@/components/ui/button";
-import { SignupValidation } from "@/lib/validation";
+import { SigninValidation } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -21,10 +21,10 @@ import { useUserContext } from "@/context/AuthContext";
 
 const SigninForm = () => {
   const { toast } = useToast();
-  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const { checkAuthUser } = useUserContext();
   const navigate = useNavigate();
 
-  const { mutateAsync: signInAccount, isPending: isSigningIn } =
+  const { mutateAsync: signInAccount, isPending: isUserLoading } =
     useSignInAccount();
 
   // 1. Define your form.
@@ -37,15 +37,7 @@ const SigninForm = () => {
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof SignupValidation>) {
-    const newUser = await createUserAccount(values);
-
-    if (!newUser) {
-      return toast({
-        title: "Sign up failed. Please try again",
-      });
-    }
-
+  async function onSubmit(values: z.infer<typeof SigninValidation>) {
     const session = await signInAccount({
       email: values.email,
       password: values.password,
@@ -71,43 +63,17 @@ const SigninForm = () => {
         <img src="/assets/images/logo.svg" alt="logo" />
 
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
-          Create a new account
+          Log in to your account
         </h2>
 
         <p className="text-light-3 small-medium md:base-regular mt-2">
-          To use Socialconnect, please enter your details
+          Welcome back! Please enter your details
         </p>
 
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-5 w-full mt-4"
         >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input type="text" className="shad-input" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input type="text" className="shad-input" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="email"
@@ -135,26 +101,26 @@ const SigninForm = () => {
             )}
           />
           <Button
-            disabled={isCreatingUser}
+            disabled={isUserLoading}
             type="submit"
             className="shad-button_primary disabled:bg-primary-600 opacity-90"
           >
-            {isCreatingUser ? (
+            {isUserLoading ? (
               <div className="flex-center gap-2">
                 <Loader /> Loading...
               </div>
             ) : (
-              "Sign up"
+              "Sign in"
             )}
           </Button>
 
           <p className="small-regular text-light-2 text-center mt-2">
-            Already have an account?
+            Don't have an account?
             <Link
-              to="/sign-in"
+              to="/sign-up"
               className="text-primary-500 small-semibold ml-1"
             >
-              Log in
+              Sign up
             </Link>
           </p>
         </form>
