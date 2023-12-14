@@ -136,6 +136,18 @@ export async function createPost(post: INewPost) {
   }
 }
 
+export async function getRecentPosts() {
+  const posts = await database.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.postCollectionId,
+    [Query.orderDesc("$createdAt"), Query.limit(20)]
+  );
+
+  if (!posts) throw Error;
+
+  return posts;
+}
+
 //  helper function
 export async function uploadFile(file: File) {
   try {
@@ -151,9 +163,9 @@ export async function uploadFile(file: File) {
   }
 }
 
-export async function getFilePreview(fileId: string) {
+export function getFilePreview(fileId: string) {
   try {
-    const fileUrl = await storage.getFilePreview(
+    const fileUrl = storage.getFilePreview(
       appwriteConfig.storageId,
       fileId,
       2000,
