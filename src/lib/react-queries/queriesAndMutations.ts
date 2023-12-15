@@ -110,8 +110,8 @@ export const useDeleteSavedPost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ savedRecordId }: { savedRecordId: string }) =>
-      deletePost(savedRecordId),
+    mutationFn: ({ saveRecordId }: { saveRecordId: string }) =>
+      deletePost(saveRecordId),
 
     onSuccess: () => {
       queryClient.invalidateQueries({
