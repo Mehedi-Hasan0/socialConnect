@@ -72,6 +72,7 @@ export async function signOutAccount() {
   }
 }
 
+// ================= GET CURRENT USER
 export async function getCurrentUser() {
   try {
     const currentAccount = await account.get();
@@ -136,6 +137,7 @@ export async function createPost(post: INewPost) {
   }
 }
 
+// ================= GET RECENT POST
 export async function getRecentPosts() {
   const posts = await database.listDocuments(
     appwriteConfig.databaseId,
@@ -148,6 +150,7 @@ export async function getRecentPosts() {
   return posts;
 }
 
+// ================= LIKING POST
 export async function likePost(postId: string, likesArray: string[]) {
   try {
     const updatedPost = await database.updateDocument(
@@ -167,6 +170,7 @@ export async function likePost(postId: string, likesArray: string[]) {
   }
 }
 
+// ================= SAVING POST
 export async function savePost(postId: string, userId: string) {
   try {
     const updatedPost = await database.createDocument(
@@ -187,6 +191,7 @@ export async function savePost(postId: string, userId: string) {
   }
 }
 
+// ================= DELETING POST
 export async function deletePost(saveRecordId: string) {
   try {
     const updatedPost = await database.deleteDocument(
@@ -198,6 +203,20 @@ export async function deletePost(saveRecordId: string) {
     if (!updatedPost) throw Error;
 
     return { status: "ok" };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getPostById(postId: string) {
+  try {
+    const post = await database.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      postId
+    );
+
+    return post;
   } catch (error) {
     console.log(error);
   }

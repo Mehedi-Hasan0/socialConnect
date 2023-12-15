@@ -23,9 +23,10 @@ import { useNavigate } from "react-router-dom";
 
 type PostFormProps = {
   post?: Models.Document;
+  action: "Create" | "Update";
 };
 
-const PostForm = ({ post }: PostFormProps) => {
+const PostForm = ({ post, action }: PostFormProps) => {
   const { mutateAsync: createPost, isPending: isLoadingCreate } =
     useCreatePost();
   const { user } = useUserContext();
@@ -106,7 +107,12 @@ const PostForm = ({ post }: PostFormProps) => {
             <FormItem>
               <FormLabel className="shad-form_label">Add Location</FormLabel>
               <FormControl>
-                <Input type="text" className="shad-input" {...field} />
+                <Input
+                  type="text"
+                  placeholder="Your location"
+                  className="shad-input"
+                  {...field}
+                />
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
@@ -125,7 +131,7 @@ const PostForm = ({ post }: PostFormProps) => {
                 <Input
                   type="text"
                   className="shad-input"
-                  placeholder="Art, Expression, Coding"
+                  placeholder="Ex: Art, Expression, Coding"
                   {...field}
                 />
               </FormControl>
